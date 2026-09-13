@@ -227,6 +227,22 @@ body {
   animation: pulseDot 2s infinite ease-in-out;
 }
 
+.status-dot.ready {
+  background-color: var(--primary);
+  box-shadow: 0 0 8px var(--primary-glow);
+}
+
+.status-dot.analyzing {
+  background-color: var(--amber);
+  box-shadow: 0 0 8px var(--amber-glow);
+  animation: pulseDot 0.9s infinite ease-in-out;
+}
+
+.status-dot.offline {
+  background-color: var(--red);
+  box-shadow: 0 0 8px var(--red-glow);
+}
+
 @keyframes pulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.6; transform: scale(1.2); }

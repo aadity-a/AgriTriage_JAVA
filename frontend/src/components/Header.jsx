@@ -2,19 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { Sprout, Activity } from 'lucide-react';
 import { checkHealth } from '../services/api';
 
-export default function Header() {
-  const [isOnline, setIsOnline] = useState(false);
+export default function Header({ uiState = 'idle' }) {
+  const [isOnline, setIsOnline] = useState(true);
   const [activeTab, setActiveTab] = useState('inbox');
 
+  const verifyHealth = async () => {
+    const ok = await checkHealth();
+    setIsOnline(ok);
+  };
+
   useEffect(() => {
-    async function verifyHealth() {
-      const ok = await checkHealth();
-      setIsOnline(ok);
-    }
     verifyHealth();
-    const timer = setInterval(verifyHealth, 15000);
+    const timer = setInterval(verifyHealth, 10000);
     return () => clearInterval(timer);
   }, []);
+
+  // Compute status display based on connectivity and triage lifecycle
+  let statusText = 'AGENT ONLINE';
+  let dotClass = 'online';
+
+  if (!isOnline) {
+    statusText = 'OFFLINE';
+    dotClass = 'offline';
+  } else if (uiState === 'loading') {
+    statusText = 'ANALYZING';
+    dotClass = 'analyzing';
+  } else if (uiState === 'results') {
+    statusText = 'ANALYSIS READY';
+    dotClass = 'ready';
+  } else {
+    statusText = 'AGENT ONLINE';
+    dotClass = 'online';
+  }
 
   return (
     <header className="header">
@@ -49,8 +68,8 @@ export default function Header() {
       </nav>
 
       <div className="system-status">
-        <span className={`status-dot ${isOnline ? 'online' : ''}`}></span>
-        <span>{isOnline ? 'SYSTEM ACTIVE' : 'CONNECTING...'}</span>
+        <span className={`status-dot ${dotClass}`}></span>
+        <span>{statusText}</span>
       </div>
     </header>
   );

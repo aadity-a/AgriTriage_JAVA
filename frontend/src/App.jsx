@@ -53,7 +53,7 @@ export default function App() {
       <div className="bg-orb orb-2"></div>
 
       <div className="app-container">
-        <Header />
+        <Header uiState={uiState} />
 
         <main className="main-grid">
           {/* Left Column: Input Form & Presets */}
