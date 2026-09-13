@@ -11,7 +11,6 @@ export default function App() {
   const [message, setMessage] = useState('');
   const [senderName, setSenderName] = useState('');
   const [senderEmail, setSenderEmail] = useState('');
-  const [endpoint, setEndpoint] = useState('/api/triage');
 
   const [uiState, setUiState] = useState('idle'); // 'idle' | 'loading' | 'results' | 'error'
   const [result, setResult] = useState(null);
@@ -28,7 +27,6 @@ export default function App() {
         message,
         senderName,
         senderEmail,
-        endpoint,
       });
       setResult(data);
       setUiState('results');
@@ -67,8 +65,6 @@ export default function App() {
               setSenderName={setSenderName}
               senderEmail={senderEmail}
               setSenderEmail={setSenderEmail}
-              endpoint={endpoint}
-              setEndpoint={setEndpoint}
               onSubmit={handleTriage}
               onClear={handleClear}
               isLoading={uiState === 'loading'}
@@ -92,9 +88,9 @@ export default function App() {
                 <div className="idle-icon">
                   <ShieldQuestion size={32} />
                 </div>
-                <h3 className="idle-title">Awaiting Input</h3>
+                <h3 className="idle-title">Submit a message to begin triage analysis</h3>
                 <p className="idle-desc">
-                  Select a quick preset or paste an incoming communication to evaluate urgency and extract field entities.
+                  The agent will classify urgency, extract entities, and generate a draft response.
                 </p>
               </div>
             )}

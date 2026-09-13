@@ -23,7 +23,7 @@ export default function Header() {
           <Sprout size={22} strokeWidth={2.4} />
         </div>
         <div className="logo-title">AgriTriage</div>
-        <span className="logo-badge">Spring Boot + React</span>
+        <span className="logo-badge">AI</span>
       </div>
 
       <nav className="nav-pills">

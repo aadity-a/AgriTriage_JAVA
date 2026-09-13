@@ -9,8 +9,6 @@ export default function TriageInput({
   setSenderName,
   senderEmail,
   setSenderEmail,
-  endpoint,
-  setEndpoint,
   onSubmit,
   onClear,
   isLoading,
@@ -31,7 +29,7 @@ export default function TriageInput({
   return (
     <div className="glass-panel">
       <div className="panel-header">
-        <h2 className="panel-title">Inbound Field Transmission</h2>
+        <h2 className="panel-title">Describe your problem/issue here</h2>
         <p className="panel-subtitle">
           Submit farmer issues, pest observations, or field reports for reactive AI triage.
         </p>
@@ -48,7 +46,7 @@ export default function TriageInput({
             id="msg-area"
             className="form-textarea"
             rows={5}
-            placeholder="Type or paste the farmer's WhatsApp message, SMS, or field log here..."
+            placeholder={`Paste or type the incoming farmer/field communication here...\n\nExample: My wheat crop in Vidisha district is showing yellow patches since last Tuesday. Farmer ID: F-2847. Please advise urgently.`}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
@@ -81,17 +79,6 @@ export default function TriageInput({
           </div>
         </div>
 
-        <div className="form-group">
-          <label className="form-label" htmlFor="endpoint-override">API Gateway</label>
-          <input
-            id="endpoint-override"
-            className="form-input"
-            type="text"
-            value={endpoint}
-            onChange={(e) => setEndpoint(e.target.value)}
-          />
-        </div>
-
         <div className="form-actions">
           <button
             type="button"
@@ -108,7 +95,7 @@ export default function TriageInput({
             disabled={isLoading || !message.trim()}
           >
             <Send size={15} />
-            {isLoading ? 'Triaging...' : 'Analyze & Triage'}
+            {isLoading ? 'Analyzing...' : 'Analyze'}
           </button>
         </div>
       </form>
