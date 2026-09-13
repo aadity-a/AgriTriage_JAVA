@@ -18,7 +18,7 @@ const PRESETS = [
   },
   {
     id: 'general',
-    label: 'General Query',
+    label: 'General Advice',
     icon: HelpCircle,
     msg: 'Hello, could you share the recommended sowing dates for mustard crop in Rajasthan for the upcoming Rabi season? Also looking for subsidized seed varieties.',
     sender: 'Kailash Meena',

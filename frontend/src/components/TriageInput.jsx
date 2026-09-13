@@ -29,7 +29,7 @@ export default function TriageInput({
   return (
     <div className="glass-panel">
       <div className="panel-header">
-        <h2 className="panel-title">Describe your problem/issue here</h2>
+        <h2 className="panel-title">Describe the Field Issue</h2>
         <p className="panel-subtitle">
           Submit farmer issues, pest observations, or field reports for reactive AI triage.
         </p>

@@ -79,7 +79,7 @@ export default function App() {
                 {uiState === 'loading' && 'Autonomous triage pipeline processing in progress...'}
                 {uiState === 'results' && 'Diagnostic evaluation, entity extraction & response synthesized.'}
                 {uiState === 'error' && 'Execution error during triage pipeline invocation.'}
-                {uiState === 'idle' && 'Real-time telemetry and structured diagnostic analysis will appear here.'}
+                {uiState === 'idle' && 'AI-powered classification and structured diagnostic analysis will appear here.'}
               </p>
             </div>
 

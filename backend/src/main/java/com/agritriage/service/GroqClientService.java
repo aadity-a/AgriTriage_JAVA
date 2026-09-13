@@ -44,7 +44,7 @@ public class GroqClientService {
                 groqProperties.getModel(),
                 List.of(
                         new ChatMessage("system", systemPrompt),
-                        new ChatMessage("human", userMessage)
+                        new ChatMessage("user", userMessage)
                 ),
                 groqProperties.getTemperature()
         );
