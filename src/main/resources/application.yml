@@ -1,0 +1,20 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: AgriTriage
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/,file:frontend/
+
+groq:
+  api-key: ${GROQ_API_KEY:}
+  model: llama-3.1-8b-instant
+  api-url: https://api.groq.com/openai/v1/chat/completions
+  temperature: 0.2
+
+logging:
+  level:
+    com.agritriage: INFO
+    org.springframework.web: INFO
