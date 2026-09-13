@@ -1,13 +1,14 @@
-# AgriTriage — Agriculture Support Intelligence Agent (Spring Boot)
+# AgriTriage — Agriculture Support Intelligence Agent (Spring Boot + React)
 
 [![CI/CD Pipeline](https://github.com/aadity-a/AgriTriage_JAVA/actions/workflows/ci.yml/badge.svg)](https://github.com/aadity-a/AgriTriage_JAVA/actions/workflows/ci.yml)
 
 Production-grade reactive triage agent for agricultural communications.  
-Built with **Java 21** + **Spring Boot 3** + **Groq Cloud LLM (`llama-3.1-8b-instant`)** + **Vanilla HTML/CSS/JS**.
+Built with **Java 21** + **Spring Boot 3** + **Groq Cloud LLM (`llama-3.1-8b-instant`)** + **React (Vite)**.
 
 - ⚡ **High-Throughput Reactive Processing**: Spring Boot REST backend with Groq LLM integration.
+- ⚛️ **Modern React Frontend**: Component-driven UI with Vite, Lucide icons, glassmorphism aesthetics, and real-time triage animations.
 - 🌾 **Domain-Specific Triage**: Classifies urgency, detects intent, extracts named entities (farmer ID, crop, location, dates, keywords), drafts responses, and generates summaries.
-- 🐳 **Docker & Containerization**: Multi-stage build with Eclipse Temurin JDK/JRE 21.
+- 🐳 **Docker & Containerization**: Multi-stage build with Node.js 22, Maven 3.9, and Eclipse Temurin JRE 21.
 - ☸️ **Kubernetes Ready**: Complete manifests for deployment, services, and secret management.
 - 🔄 **Automated CI/CD**: Dual-pipeline support with GitHub Actions and Jenkins.
 
@@ -19,7 +20,7 @@ Built with **Java 21** + **Spring Boot 3** + **Groq Cloud LLM (`llama-3.1-8b-ins
 AgriTriage/
 ├── pom.xml                                   # Maven dependencies & build configuration
 ├── mvnw / mvnw.cmd                           # Maven wrapper scripts
-├── Dockerfile                                # Multi-stage Docker build (Maven + JRE 21)
+├── Dockerfile                                # Multi-stage Docker build (Node + Maven + JRE 21)
 ├── docker-compose.yml                        # Local multi-container orchestration
 ├── Jenkinsfile                               # Declarative Jenkins CI/CD pipeline
 ├── .github/workflows/ci.yml                  # GitHub Actions workflow
@@ -27,6 +28,16 @@ AgriTriage/
 │   ├── deployment.yaml                       # App deployment specs
 │   ├── service.yaml                          # ClusterIP / LoadBalancer service
 │   └── secret.yaml                           # Environment secret definitions
+├── frontend/                                 # Modern React + Vite SPA
+│   ├── package.json                          # React, Lucide-React & Vite dependencies
+│   ├── vite.config.js                        # Dev proxy & static build output
+│   ├── index.html                            # HTML entrypoint with custom typography
+│   └── src/
+│       ├── main.jsx                          # React DOM root
+│       ├── App.jsx                           # Application shell & state machine
+│       ├── index.css                         # Dark glassmorphism design system
+│       ├── components/                       # Header, Input, Gauge, Entity, Draft cards
+│       └── services/api.js                   # Backend REST API integration
 ├── src/
 │   ├── main/
 │   │   ├── java/com/agritriage/
@@ -37,7 +48,7 @@ AgriTriage/
 │   │   │   └── service/                      # Groq client & 4-stage triage pipeline
 │   │   └── resources/
 │   │       ├── application.yml               # Application configuration
-│   │       └── static/                       # Static UI assets (HTML, CSS, JS)
+│   │       └── static/                       # Compiled production React distribution
 │   └── test/
 │       └── java/com/agritriage/              # MockMvc & unit test suite
 ├── HLD.pdf                                   # High-Level Architecture Design
@@ -51,6 +62,7 @@ AgriTriage/
 ### Prerequisites
 
 - **Java 21 LTS** ([Eclipse Temurin](https://adoptium.net/) or Oracle JDK)
+- **Node.js 20+** & **npm** (for frontend development)
 - **Apache Maven 3.9+** (or use the included `./mvnw`)
 - **Docker** & **Docker Compose** (optional, for containerized run)
 - **Groq API Key**: Obtain a key from [console.groq.com](https://console.groq.com)
@@ -59,29 +71,35 @@ AgriTriage/
 
 ### Local Setup & Execution
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/aadity-a/AgriTriage_JAVA.git
-   cd AgriTriage_JAVA
-   ```
-
-2. **Configure Environment Variables**:
-   Create a `.env` file or export your Groq API key:
+1. **Configure Environment Variables**:
    ```bash
    export GROQ_API_KEY=gsk_your_key_here
    ```
    *(On Windows PowerShell: `$env:GROQ_API_KEY="gsk_your_key_here"`)*
 
-3. **Run Unit Tests**:
+2. **Option A: Run Full Application (Spring Boot + Bundled React)**:
    ```bash
-   mvn clean test
-   ```
+   # Build the React frontend
+   cd frontend
+   npm install
+   npm run build
+   cd ..
 
-4. **Start the Application**:
-   ```bash
+   # Run Spring Boot (serves both API and React frontend on port 8000)
    mvn spring-boot:run
    ```
-   The dashboard will be available at: **`http://localhost:8000`**
+   Open **`http://localhost:8000`** in your browser.
+
+3. **Option B: Run in Frontend Dev Mode (Hot Reloading)**:
+   ```bash
+   # Terminal 1: Backend
+   mvn spring-boot:run
+
+   # Terminal 2: React Vite Dev Server
+   cd frontend
+   npm run dev
+   ```
+   Open **`http://localhost:5173`** (automatically proxies API requests to `http://localhost:8000`).
 
 ---
 
@@ -91,13 +109,6 @@ Build and start the containerized application with Docker Compose:
 
 ```bash
 docker compose up --build
-```
-
-Or build and run directly with Docker:
-
-```bash
-docker build -t aaditya0421/agri-triage:latest .
-docker run -p 8000:8000 -e GROQ_API_KEY="gsk_your_key_here" aaditya0421/agri-triage:latest
 ```
 
 ---
@@ -134,9 +145,9 @@ docker run -p 8000:8000 -e GROQ_API_KEY="gsk_your_key_here" aaditya0421/agri-tri
       "crop_type": "wheat",
       "location": "Ludhiana",
       "dates": [],
-      "issue_keywords": ["yellow rust", "leaves turning powder-yellow", "spreading fast"]
+      "issue_keywords": ["yellow rust", "powder-yellow", "spreading fast"]
     },
-    "draft_response": "Dear Harpreet Singh, we acknowledge the urgent threat of yellow rust on your wheat crop in Ludhiana. Please immediately isolate the affected 5-acre section and consider applying a recommended fungicide such as Propiconazole. An agricultural extension officer has been notified for expedited field inspection. We will stand by you to resolve this.",
+    "draft_response": "Dear Harpreet Singh, we acknowledge the urgent threat of yellow rust on your wheat crop in Ludhiana...",
     "summary": "Urgent yellow rust outbreak on 5 acres of wheat in Ludhiana requires immediate fungicide intervention.",
     "processing_time_ms": 680
   }
@@ -146,21 +157,19 @@ docker run -p 8000:8000 -e GROQ_API_KEY="gsk_your_key_here" aaditya0421/agri-tri
 
 ## 🧪 Testing
 
-Comprehensive unit and integration tests are included:
+Run backend tests:
 ```bash
 mvn test
 ```
 
-Test coverage includes:
-- `AgriTriageApplicationTests`: Spring Boot application context load verification.
-- `TriageControllerTest`: MockMvc web layer tests verifying `/api/health`, `/api/triage`, input validation (`400 Bad Request`), and JSON serialization.
-- `GroqClientServiceTest`: JSON fence stripping, fallback parsing, and error handling.
+Build and validate frontend:
+```bash
+cd frontend && npm run build
+```
 
 ---
 
 ## ☸️ Kubernetes Deployment
-
-Deploy manifests to your Kubernetes cluster:
 
 ```bash
 kubectl apply -f k8s/secret.yaml
