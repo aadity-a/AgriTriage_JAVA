@@ -3,7 +3,7 @@
 [![CI/CD Pipeline](https://github.com/aadity-a/AgriTriage_JAVA/actions/workflows/ci.yml/badge.svg)](https://github.com/aadity-a/AgriTriage_JAVA/actions/workflows/ci.yml)
 
 Production-grade reactive triage agent for agricultural communications.  
-Built with **Java 21** + **Spring Boot 3** + **Groq Cloud LLM (`llama-3.1-8b-instant`)** + **React (Vite)**.
+Built with **Java 21** + **Spring Boot 3** (in `backend/`) + **Groq Cloud LLM (`llama-3.1-8b-instant`)** + **React (Vite)** (in `frontend/`).
 
 - ⚡ **High-Throughput Reactive Processing**: Spring Boot REST backend with Groq LLM integration.
 - ⚛️ **Modern React Frontend**: Component-driven UI with Vite, Lucide icons, glassmorphism aesthetics, and real-time triage animations.
@@ -18,16 +18,22 @@ Built with **Java 21** + **Spring Boot 3** + **Groq Cloud LLM (`llama-3.1-8b-ins
 
 ```
 AgriTriage/
-├── pom.xml                                   # Maven dependencies & build configuration
-├── mvnw / mvnw.cmd                           # Maven wrapper scripts
-├── Dockerfile                                # Multi-stage Docker build (Node + Maven + JRE 21)
-├── docker-compose.yml                        # Local multi-container orchestration
-├── Jenkinsfile                               # Declarative Jenkins CI/CD pipeline
-├── .github/workflows/ci.yml                  # GitHub Actions workflow
-├── k8s/                                      # Kubernetes manifests
-│   ├── deployment.yaml                       # App deployment specs
-│   ├── service.yaml                          # ClusterIP / LoadBalancer service
-│   └── secret.yaml                           # Environment secret definitions
+├── backend/                                  # Java 21 + Spring Boot 3 Backend
+│   ├── pom.xml                               # Maven dependencies & build configuration
+│   ├── mvnw / mvnw.cmd                       # Maven wrapper scripts
+│   └── src/
+│       ├── main/
+│       │   ├── java/com/agritriage/
+│       │   │   ├── AgriTriageApplication.java# Spring Boot application entrypoint
+│       │   │   ├── config/                   # Web MVC, CORS, and Groq properties
+│       │   │   ├── controller/               # REST controller (/api/triage, /api/health)
+│       │   │   ├── dto/                      # Request, response, and entity models
+│       │   │   └── service/                  # Groq client & 4-stage triage pipeline
+│       │   └── resources/
+│       │       ├── application.yml           # Application configuration
+│       │       └── static/                   # Compiled production React SPA distribution
+│       └── test/
+│           └── java/com/agritriage/          # MockMvc & unit test suite
 ├── frontend/                                 # Modern React + Vite SPA
 │   ├── package.json                          # React, Lucide-React & Vite dependencies
 │   ├── vite.config.js                        # Dev proxy & static build output
@@ -38,19 +44,14 @@ AgriTriage/
 │       ├── index.css                         # Dark glassmorphism design system
 │       ├── components/                       # Header, Input, Gauge, Entity, Draft cards
 │       └── services/api.js                   # Backend REST API integration
-├── src/
-│   ├── main/
-│   │   ├── java/com/agritriage/
-│   │   │   ├── AgriTriageApplication.java    # Spring Boot application entrypoint
-│   │   │   ├── config/                       # Web MVC, CORS, and Groq properties
-│   │   │   ├── controller/                   # REST controller (/api/triage, /api/health)
-│   │   │   ├── dto/                          # Request, response, and entity models
-│   │   │   └── service/                      # Groq client & 4-stage triage pipeline
-│   │   └── resources/
-│   │       ├── application.yml               # Application configuration
-│   │       └── static/                       # Compiled production React distribution
-│   └── test/
-│       └── java/com/agritriage/              # MockMvc & unit test suite
+├── Dockerfile                                # Multi-stage Docker build (Node + Maven + JRE 21)
+├── docker-compose.yml                        # Local multi-container orchestration
+├── Jenkinsfile                               # Declarative Jenkins CI/CD pipeline
+├── .github/workflows/ci.yml                  # GitHub Actions workflow
+├── k8s/                                      # Kubernetes manifests
+│   ├── deployment.yaml                       # App deployment specs
+│   ├── service.yaml                          # ClusterIP / LoadBalancer service
+│   └── secret.yaml                           # Environment secret definitions
 ├── HLD.pdf                                   # High-Level Architecture Design
 └── LLD.pdf                                   # Low-Level Architecture Design
 ```
@@ -63,7 +64,7 @@ AgriTriage/
 
 - **Java 21 LTS** ([Eclipse Temurin](https://adoptium.net/) or Oracle JDK)
 - **Node.js 20+** & **npm** (for frontend development)
-- **Apache Maven 3.9+** (or use the included `./mvnw`)
+- **Apache Maven 3.9+** (or use `./mvnw` in `backend/`)
 - **Docker** & **Docker Compose** (optional, for containerized run)
 - **Groq API Key**: Obtain a key from [console.groq.com](https://console.groq.com)
 
@@ -79,13 +80,14 @@ AgriTriage/
 
 2. **Option A: Run Full Application (Spring Boot + Bundled React)**:
    ```bash
-   # Build the React frontend
+   # Build the React frontend into backend static resources
    cd frontend
    npm install
    npm run build
    cd ..
 
    # Run Spring Boot (serves both API and React frontend on port 8000)
+   cd backend
    mvn spring-boot:run
    ```
    Open **`http://localhost:8000`** in your browser.
@@ -93,6 +95,7 @@ AgriTriage/
 3. **Option B: Run in Frontend Dev Mode (Hot Reloading)**:
    ```bash
    # Terminal 1: Backend
+   cd backend
    mvn spring-boot:run
 
    # Terminal 2: React Vite Dev Server
@@ -159,12 +162,14 @@ docker compose up --build
 
 Run backend tests:
 ```bash
+cd backend
 mvn test
 ```
 
 Build and validate frontend:
 ```bash
-cd frontend && npm run build
+cd frontend
+npm run build
 ```
 
 ---

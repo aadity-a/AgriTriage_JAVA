@@ -22,6 +22,7 @@ jobs:
         cache: 'maven'
 
     - name: Test and Build with Maven
+      working-directory: backend
       run: mvn -B clean test package
 
     - name: Set up Docker Buildx

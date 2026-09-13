@@ -10,12 +10,12 @@ RUN npm run build
 FROM maven:3.9.6-eclipse-temurin-21-alpine AS backend-builder
 WORKDIR /build
 
-COPY pom.xml .
+COPY backend/pom.xml .
 RUN mvn dependency:go-offline -B
 
-COPY src ./src
+COPY backend/src ./src
 # Copy compiled React frontend into Spring Boot static resources
-COPY --from=frontend-builder /src/main/resources/static ./src/main/resources/static
+COPY --from=frontend-builder /backend/src/main/resources/static ./src/main/resources/static
 
 RUN mvn clean package -DskipTests=true
 
