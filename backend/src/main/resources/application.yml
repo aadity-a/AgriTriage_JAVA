@@ -10,7 +10,7 @@ spring:
 
 groq:
   api-key: ${GROQ_API_KEY:}
-  model: llama-3.1-8b-instant
+  model: openai/gpt-oss-120b
   api-url: https://api.groq.com/openai/v1/chat/completions
   temperature: 0.2
 
