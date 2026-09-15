@@ -6,7 +6,7 @@ const PRESETS = [
     id: 'pest',
     label: 'Pest Attack',
     icon: Bug,
-    msg: 'Farmer ID: F-8921. Yellow rust observed on wheat crops in block 4, Ludhiana district. Leaves turning yellow-brown and powdery. Spreading rapidly since yesterday. Need urgent advice.',
+    msg: 'Yellow rust observed on wheat crops in block 4, Ludhiana district. Leaves turning yellow-brown and powdery. Spreading rapidly since yesterday. Need urgent advice.',
     sender: 'Harpreet Singh',
   },
   {
@@ -27,7 +27,7 @@ const PRESETS = [
     id: 'irrigation',
     label: 'Drip Irrigation',
     icon: Wrench,
-    msg: 'Account: AGR-3341. Our drip irrigation lateral lines in polyhouse unit 2 have low pressure and multiple emitters are clogged with mineral deposits. Need descaling protocol.',
+    msg: 'Our drip irrigation lateral lines in polyhouse unit 2 have low pressure and multiple emitters are clogged with mineral deposits. Need descaling protocol.',
     sender: 'Suresh Patel',
   },
 ];

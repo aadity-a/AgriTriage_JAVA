@@ -46,7 +46,7 @@ export default function TriageInput({
             id="msg-area"
             className="form-textarea"
             rows={5}
-            placeholder={`Paste or type the incoming farmer/field communication here...\n\nExample: My wheat crop in Vidisha district is showing yellow patches since last Tuesday. Farmer ID: F-2847. Please advise urgently.`}
+            placeholder={`Farmer's message here…\n\nExample: My wheat crop in Vidisha district is showing yellow patches since last Tuesday. Please advise urgently.`}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
