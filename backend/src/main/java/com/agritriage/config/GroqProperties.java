@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class GroqProperties {
 
     private String apiKey;
-    private String model = "llama-3.1-8b-instant";
+    private String model = "openai/gpt-oss-120b";
     private String apiUrl = "https://api.groq.com/openai/v1/chat/completions";
     private double temperature = 0.2;
 
