@@ -35,8 +35,6 @@ export default function ResultsPanel({ result }) {
 
       <div className="telemetry-row">
         <span>Processing: {processing_time_ms}ms</span>
-        <span>Model: llama-3.1-8b-instant</span>
-        <span>Engine: Spring Boot 3</span>
       </div>
     </div>
   );
