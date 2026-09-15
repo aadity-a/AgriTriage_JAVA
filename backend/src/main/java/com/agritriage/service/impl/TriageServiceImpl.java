@@ -46,17 +46,28 @@ public class TriageServiceImpl implements TriageService {
             """;
 
     private static final String DRAFT_PROMPT = """
-            You are a helpful agriculture support officer writing an official response.
-            Given the farmer's message, urgency level, and intent, draft a professional, empathetic reply in 3-4 sentences.
-            - Acknowledge the issue clearly.
-            - Provide an immediate actionable step or reassurance.
-            - Mention escalation path for HIGH urgency.
-            - Close warmly.
-            Write ONLY the draft reply text, no labels or preamble.
+            You are an agricultural advisory specialist drafting a response recommendation for extension officers to review.
+            Given the farmer's message, urgency level, and intent, generate a concise, grounded draft advisory recommendation in 2-3 sentences.
+
+            MANDATORY CONSTRAINTS:
+            - NO FABRICATED COMMITMENTS OR ACTIONS: The system has NO automated email, ticketing, phone call, or specialist dispatch workflow. NEVER state or promise that:
+              * An email, message, or notification has been sent or will be sent
+              * A case or ticket has been escalated, opened, or assigned
+              * A technical team, pathologist, or officer will call, email, or visit the farmer
+            - NO PREFIXES OR REPETITIVE HEADERS: Begin immediately with the actionable advisory advice (e.g. "Immediately scout...", "Check the emitter lines..."). Do NOT include labels or prefixes like "Draft Recommendation:", "Recommendation:", or "Advisory:".
+            - SAFE AGRONOMIC ADVICE: Provide only safe, standard agricultural observations or preliminary checks (e.g., checking irrigation line pressure, inspecting leaf undersides, monitoring spread). Do not invent unverified chemical mixtures, home concoctions (like vinegar flushes), or uncalibrated chemical treatments.
+            - REAL-WORLD ESCALATION: If the issue is severe or urgent, recommend that the farmer consult or bring a sample to their local Krishi Vigyan Kendra (KVK) or district agricultural extension office.
+            - Output ONLY the direct advisory text, without preamble, labels, or quotes.
             """;
 
-    private static final String SUMMARY_PROMPT =
-            "Summarise the farmer's issue in one crisp sentence (max 20 words) for an internal dashboard.";
+    private static final String SUMMARY_PROMPT = """
+            You are an agriculture triage log analyzer.
+            Write a single, factual sentence (under 20 words) describing strictly what the farmer is reporting or requesting.
+            Do NOT provide advice, solutions, recommendations, or agricultural instructions.
+            Answer ONLY: What is the farmer's core issue or request?
+            Example format: "Farmer is reporting severe yellow rust on wheat in Ludhiana." or "Farmer is seeking guidance on Rabi mustard sowing dates and subsidized seeds in Rajasthan."
+            Output ONLY the one sentence, without preamble or quotes.
+            """;
 
     private final GroqClientService groqClientService;
 
@@ -104,9 +115,11 @@ public class TriageServiceImpl implements TriageService {
         String draftUserMsg = String.format("Farmer Message: %s\nUrgency: %s\nIntent: %s\nSender: %s",
                 message, urgency, intent, senderName);
         String draftResponse = groqClientService.generateCompletion(DRAFT_PROMPT, draftUserMsg).trim();
+        draftResponse = draftResponse.replaceAll("^(?i)(draft\\s+)?(advisory\\s+)?recommendation:\\s*", "").trim();
 
         // 4. Summary
-        String summary = groqClientService.generateCompletion(SUMMARY_PROMPT, message).trim();
+        String summary = groqClientService.generateCompletion(SUMMARY_PROMPT, "Farmer Message: " + message).trim();
+        summary = summary.replaceAll("^\"|\"$", "").trim();
 
         int elapsedMs = (int) (System.currentTimeMillis() - startTime);
         log.info("Triage processing completed in {}ms with urgency='{}' score={}", elapsedMs, urgency, urgencyScore);
