@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Sprout, Activity } from 'lucide-react';
+import { Sprout } from 'lucide-react';
 import { checkHealth } from '../services/api';
 
 export default function Header({ uiState = 'idle' }) {
   const [isOnline, setIsOnline] = useState(true);
-  const [activeTab, setActiveTab] = useState('inbox');
 
   const verifyHealth = async () => {
     const ok = await checkHealth();
@@ -44,28 +43,6 @@ export default function Header({ uiState = 'idle' }) {
         <div className="logo-title">AgriTriage</div>
         <span className="logo-badge">AI</span>
       </div>
-
-      <nav className="nav-pills">
-        <button
-          className={`pill-item ${activeTab === 'inbox' ? 'active' : ''}`}
-          onClick={() => setActiveTab('inbox')}
-        >
-          <Activity size={14} />
-          Triage Inbox
-        </button>
-        <button
-          className={`pill-item ${activeTab === 'history' ? 'active' : ''}`}
-          onClick={() => setActiveTab('history')}
-        >
-          History
-        </button>
-        <button
-          className={`pill-item ${activeTab === 'analytics' ? 'active' : ''}`}
-          onClick={() => setActiveTab('analytics')}
-        >
-          Analytics
-        </button>
-      </nav>
 
       <div className="system-status">
         <span className={`status-dot ${dotClass}`}></span>
