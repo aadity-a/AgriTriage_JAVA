@@ -3,21 +3,10 @@ import React from 'react';
 export default function EntityGrid({ entities }) {
   if (!entities) return null;
 
-  const { farmer_id, crop_type, location, dates = [], issue_keywords = [] } = entities;
+  const { crop_type, location, dates = [], issue_keywords = [] } = entities;
 
   return (
     <div className="entities-grid">
-      <div className="entity-card">
-        <span className="entity-key">Farmer Identifier</span>
-        <div className="entity-tags">
-          {farmer_id ? (
-            <span className="tag-badge">{farmer_id}</span>
-          ) : (
-            <span className="tag-empty">Not detected</span>
-          )}
-        </div>
-      </div>
-
       <div className="entity-card">
         <span className="entity-key">Target Crop</span>
         <div className="entity-tags">
@@ -51,8 +40,8 @@ export default function EntityGrid({ entities }) {
         </div>
       </div>
 
-      <div className="entity-card" style={{ gridColumn: 'span 2' }}>
-        <span className="entity-key">Detected Issue Keywords</span>
+      <div className="entity-card entity-card-full">
+        <span className="entity-key">Detected Issues</span>
         <div className="entity-tags">
           {issue_keywords.length > 0 ? (
             issue_keywords.map((kw, i) => (
