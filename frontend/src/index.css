@@ -725,8 +725,18 @@ body {
 /* Entities Grid */
 .entities-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+}
+
+.entity-card-full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .entities-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .entity-card {
